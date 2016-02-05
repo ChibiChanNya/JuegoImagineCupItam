@@ -16,3 +16,8 @@ Resulta que el monito, se encuentra con el jefe de la organización quien le cue
 También le cuenta que es su hijo… lo cual no parece evidente pues el jefe no parece humano (pero eso es porque él también fue resultado de un experimento que lo hizo así, pero quiso volver a intentar con su hijo).
 El monito se enoja por descubrir que su propio padre le hizo todo esto e intenta usar sus poderes telepáticos para poder salir de ahí, y como es de sospechar su padre no lo deja… pelean, gana el monito y fin del juego.
 
+
+### Links
+
+https://www.imaginecup.com/competition/17491
+
