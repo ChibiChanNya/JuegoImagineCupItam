@@ -1,0 +1,87 @@
+#include <SFML/Graphics.hpp>
+#include <SFML/OpenGL.hpp>
+using namespace sf;
+
+Image image;
+GLuint textura;
+float personaje [16] = {
+        // positions    // texture coordinates
+         0,   0,  0, 0,
+        40,   0,  1, 0,
+        40,  40,  1, 1,
+         0,  40,  0, 1,
+    };
+
+void dibujaFE(RenderWindow* window){
+    glBindTexture(GL_TEXTURE_2D, textura);
+    glVertexPointer(2, GL_FLOAT, 4 * sizeof(float), personaje);
+    glTexCoordPointer(2, GL_FLOAT, 4 * sizeof(float), personaje + 2);
+    glDrawArrays(GL_QUADS, 0, 4);
+}
+void loadTexture(GLuint* textura2,Image* imagen){
+	imagen->loadFromFile("sprite.png");
+	glGenTextures(1, textura2);
+    glBindTexture(GL_TEXTURE_2D, *textura2);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imagen->getSize().x, imagen->getSize().y, 0, GL_RGBA, GL_UNSIGNED_BYTE, imagen->getPixelsPtr());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+}
+void idle(Clock* clock){
+	
+}
+void display(RenderWindow* window){
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glPushMatrix();
+		glTranslatef(x,y,0);
+		glRotatef(jaja/100,0,1,0);
+		dibujaFE(window);
+    glPopMatrix();
+    
+    window->display();
+}
+void Init(RenderWindow* window){
+    window->setVerticalSyncEnabled(true);
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+    glClearDepth(1.f);
+    glViewport(0, 0, window->getSize().x, window->getSize().y);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    GLfloat ratio = static_cast<float>(window->getSize().x) / window->getSize().y;
+    glFrustum(-ratio, ratio, -1.f, 1.f, 1.f, 500.f);
+    glEnable(GL_TEXTURE_2D);
+    // Enable position and texture coordinates vertex components
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    // Disable normal and color vertex components
+    glDisableClientState(GL_NORMAL_ARRAY);
+    glDisableClientState(GL_COLOR_ARRAY);
+}
+int main(){    
+    Clock clock;
+    ContextSettings settings;
+	settings.depthBits = 240;
+    RenderWindow window(VideoMode(800, 600), "SFML works!", sf::Style::Default, settings);
+    
+    loadTexture(&textura,&image);
+    Init(&window);	
+
+    bool running = true;
+    while (running){
+        Event event;
+        while (window.pollEvent(event)){
+            if (event.type == Event::Closed){
+                running = false;
+            }
+            else if (event.type == Event::Resized){
+                glViewport(0, 0, event.size.width, event.size.height);
+            }
+        }
+        idle(&clock);
+        display(&window);
+    }
+    return 0;
+}

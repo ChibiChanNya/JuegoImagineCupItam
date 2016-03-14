@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include <math.h>
+#include <SFML/Graphics.hpp>
+#include <SFML/OpenGL.hpp>
+#include <SFML/Audio.hpp>
+#include <string>
+using namespace std; 
+using namespace sf;
+
+#include "librerias/cargaTextura.h"
+#include "librerias/mapa.h"
+Mapa mapa;
+#include "librerias/init.h"
+#include "librerias/idle.h"
+#include "librerias/display.h"
+#include "librerias/cargaJuego.h"
+
+int main()
+{
+    ContextSettings contextSettings;
+    contextSettings.depthBits = 24;
+    
+    RenderWindow window(sf::VideoMode(800, 600), "Juego", ::Style::Default, contextSettings);
+    window.setVerticalSyncEnabled(true);
+    init(&window);
+
+    Clock clock;
+
+    while (window.isOpen()){
+        Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == Event::Closed)
+                window.close();
+
+            if (event.type == Event::Resized)
+                glViewport(0, 0, event.size.width, event.size.height);
+        }        
+        idle(&clock);
+        display(&window);
+    }
+
+    // Don't forget to destroy our texture
+
+    return 0;
+}
